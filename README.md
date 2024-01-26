@@ -1,46 +1,72 @@
-# Getting Started with Create React App
+# Formula 1 Drivers Information App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project is a simple web application displaying and mutating information of Formula 1 drivers. It uses Node.js and Express for the backend, React for the frontend, and is written in modern TypeScript.
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+### Prerequisites
 
-### `npm start`
+- Node.js
+- npm or yarn
+- Git
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Installation
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```bash
+cd backend && npm install && cd ../frontend && npm install && cd ..
+```
 
-### `npm test`
+> [!NOTE]  
+> If install runs into a peerDependencies conflict, use the following command instead
+```bash
+cd backend && npm install && cd ../frontend && npm install --legacy-peer-deps && cd ..
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Running the Application
 
-### `npm run build`
+1. Start the backend server:
+   ```bash
+   cd backend && npm start
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. In a new terminal, start the frontend application:
+   ```bash
+   cd frontend && npm start
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The application will be running on `http://localhost:3000`.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Features
 
-### `npm run eject`
+### Backend
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- JSON data source for driver information.
+- `GET api/drivers` endpoint to serve data about all drivers.
+- Random assignment of places to drivers on startup.
+- Static serving of driver photos.
+- `POST api/drivers/{driverId}/overtake` endpoint for overtaking logic.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Frontend
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- Single page on `/drivers` route.
+- Displays driver names, teams, places, codes, and photos.
+- Button/arrow for overtaking functionality.
+- Minimal styling.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Additional Features
 
-## Learn More
+- Displaying driver's home country flag.
+- Functionality for overtaking multiple drivers at once.
+- Drag and drop reorder functionality.
+- Dockerization of the application.
+- PostgreSQL database for data persistence.
+- CSS animations for reordering drivers.
+- Basic backend tests with Jest.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Demonstration Video
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+A brief demonstration of the application is available [here]([Loom link]).
+
+---
+
+Developed by Bence Papp
