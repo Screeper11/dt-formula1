@@ -1,10 +1,15 @@
 import express from 'express';
 import path from 'path';
+import cors from 'cors';
 import fs from 'fs';
 import {DriversManager} from "./DriversManager";
 
+// Config server
 const app = express();
 const port = 3001;
+app.use(cors({
+  origin: '*'  // TODO Specify the production domain during deployment
+}))
 
 // Load data
 app.use(express.json());
