@@ -9,14 +9,7 @@ const app = express();
 const port = 3001;
 app.use(cors({
   origin: 'https://formula.screeper.dev',
-  methods: ['POST', 'GET', 'OPTIONS'],
-  allowedHeaders: ['Access-Control-Allow-Origin', 'X-Custom-Header',
-    'Upgrade-Insecure-Requests', 'Origin', 'Content-Type', 'Accept',
-    'Cookie', 'Set-Cookie', 'Access-Control-Allow-Credentials', 'Authorization'],
-  exposedHeaders: ['Access-Control-Allow-Origin', 'X-Custom-Header',
-    'Upgrade-Insecure-Requests', 'Origin', 'Content-Type', 'Accept',
-    'Cookie', 'Set-Cookie', 'Access-Control-Allow-Credentials', 'Authorization'],
-  credentials: true,
+  credentials: true
 }))
 
 // Load data
