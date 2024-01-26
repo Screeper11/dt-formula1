@@ -7,10 +7,7 @@ import {DriversManager} from "./DriversManager";
 // Config server
 const app = express();
 const port = process.env.PORT || 3001;
-app.use(cors({
-  origin: 'https://formula.screeper.dev',
-  credentials: true
-}))
+app.use(cors())
 
 // Load data
 app.use(express.json());
