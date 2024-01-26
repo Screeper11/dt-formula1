@@ -8,7 +8,7 @@ import {DriversManager} from "./DriversManager";
 const app = express();
 const port = 3001;
 app.use(cors({
-  origin: '*'  // TODO Specify the production domain during deployment
+  origin: 'https://formula.screeper.dev'
 }))
 
 // Load data
