@@ -18,6 +18,7 @@ cd backend && npm install && cd ../frontend && npm install && cd ..
 
 > [!NOTE]  
 > If install runs into a peerDependencies conflict, use the following command instead
+
 ```bash
 cd backend && npm install && cd ../frontend && npm install --legacy-peer-deps && cd ..
 ```
