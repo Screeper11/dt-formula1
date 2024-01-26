@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 import axios from 'axios';
-import ENV from './env.json';
-
 
 interface Driver {
   id: number;
@@ -32,7 +30,7 @@ function Drivers() {
 
   const fetchDrivers = async () => {
     try {
-      const response = await axios.get(`${ENV.BACKEND}/api/drivers`);
+      const response = await axios.get(`${process.env.BACKEND}/api/drivers`);
       const sortedByPlace = response.data.sort((a: Driver, b: Driver) => a.place - b.place);
       setDrivers(sortedByPlace);
     } catch (error) {
@@ -42,7 +40,7 @@ function Drivers() {
 
   const handleOvertake = async (index: number, driverId: number) => {
     try {
-      await axios.post(`${ENV.BACKEND}/api/drivers/${driverId}/overtake?overtakes=${overtakeCounters[index]}`);
+      await axios.post(`${process.env.BACKEND}/api/drivers/${driverId}/overtake?overtakes=${overtakeCounters[index]}`);
       await fetchDrivers();
       setOvertakeCounter(index, 1)
     } catch (error) {
@@ -67,7 +65,7 @@ function Drivers() {
                                           style={{color: positionColors[index]}}>#{driver.place}</p>
               </div>
               <div className="relative">
-                <img draggable={false} src={`${ENV.BACKEND}/${driver.imgUrl}`} alt="Driver"
+                <img draggable={false} src={`${process.env.BACKEND}/${driver.imgUrl}`} alt="Driver"
                      className="w-auto h-36 rounded-md mx-6"/>
                 <div className="absolute -bottom-1 right-4 bg-white rounded p-1 w-12 border-black border-2">
                   <p className="text-black font-bold text-center">{driver.code}</p>
