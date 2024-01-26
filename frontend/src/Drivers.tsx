@@ -75,6 +75,11 @@ function Drivers() {
           </Flipped>
         ))}
       </Flipper>
+      <div className="bg-gray-100 text-center text-gray-500 text-sm p-4 border-t-2 border-bla">
+        <p>Made by Bence Papp: <a className="text-blue-600 hover:underline"
+                                  href="https://github.com/Screeper11/dt-formula1">DT-Formula1
+          on GitHub</a>.</p>
+      </div>
     </div>
   );
 }
