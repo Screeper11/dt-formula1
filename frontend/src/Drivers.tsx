@@ -39,6 +39,7 @@ function Drivers() {
       const overTakeAmount = overtakeCounters[index];
       await axios.post(`${process.env.REACT_APP_BACKEND}/api/drivers/${driverId}/overtake?overtakes=${overTakeAmount}`);
       await fetchDrivers();
+      setOvertakeCounters(Array(21).fill(1));
     } catch (error) {
       console.error(error);
     }
@@ -46,14 +47,13 @@ function Drivers() {
 
   useEffect(() => {
     fetchDrivers().catch(e => console.error(e));
-    setOvertakeCounters(Array(21).fill(1))
   }, []);
 
   return (
     <div className="flex flex-col justify-around max-h-screen">
       <h1 className="text-3xl sm:text-4xl text-center font-semibold m-4 sm:m-6">Drivers</h1>
       <Flipper flipKey={drivers.map(driver => driver.id).join(",")}
-               className="grow grid grid-cols-1 gap-3 sm:gap-4 w-full md:min-w-[700px] overflow-auto select-none">
+               className="grow grid grid-cols-1 gap-3 sm:gap-4 min-w-[360px] overflow-auto select-none">
         {drivers.map((driver, index) => (
           <Flipped key={driver.id} flipId={driver.id}>
             <div key={driver.id}
