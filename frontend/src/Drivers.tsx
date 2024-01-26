@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import FlipMove from 'react-flip-move';
 import axios from 'axios';
 import {backendEndpoint} from "./env";
 
@@ -16,52 +17,63 @@ interface Driver {
 function Drivers() {
   const [drivers, setDrivers] = useState<Driver[]>([]);
 
-  // TODO handle errors
-  // TODO handle when first is trying to overtake
   const fetchDrivers = async () => {
-    const response = await axios.get(`${backendEndpoint}/api/drivers`);
-    const sortedByPlace = response.data.sort((a:Driver, b:Driver) => a.place - b.place);
-    setDrivers(sortedByPlace);
+    try {
+      const response = await axios.get(`${backendEndpoint}/api/drivers`);
+      const sortedByPlace = response.data.sort((a: Driver, b: Driver) => a.place - b.place);
+      setDrivers(sortedByPlace);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleOvertake = async (driverId: number) => {
-    await axios.post(`${backendEndpoint}/api/drivers/${driverId}/overtake`);
-    await fetchDrivers();
+    try {
+      await axios.post(`${backendEndpoint}/api/drivers/${driverId}/overtake`);
+      await fetchDrivers();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     fetchDrivers().catch(e => console.error(e));
   }, []);
 
+  const positionColors = ['#FFD700', '#949494', '#CD7F32'];
+
   return (
-    <main>
-      <h1 className="text-3xl font-semibold mb-4">DRIVERS</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {drivers.map((driver) => (
-          <div
-            className="bg-white p-4 shadow-md rounded-md"
-            key={driver.id}
-          >
-            <img
-              src={`${backendEndpoint}/${driver.imgUrl}`}
-              alt="Driver"
-              className="w-full h-auto rounded-md"
-            />
-            <h2 className="text-xl font-semibold mt-2">
-              {driver.firstname} {driver.lastname}
-            </h2>
-            <p className="text-gray-600">Team: {driver.team}</p>
-            <p className="text-gray-600">Current Place: {driver.place}</p>
-            <button
-              onClick={() => handleOvertake(driver.id)}
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-            >
+    <div className="flex flex-col justify-around max-h-screen">
+      <h1 className="text-6xl text-center font-semibold m-8">Drivers</h1>
+      <FlipMove className="grow grid grid-cols-1 gap-4 overflow-auto">
+        {drivers.map((driver, index) => (
+          <div key={driver.id}
+               className=" flex flex-row justify-between items-center bg-gradient-to-r from-gray-100 to-blue-50 p-4 shadow-md rounded-md border border-gray-200 mx-4">
+            <div className="mx-auto"><p className="text-3xl font-bold w-16"
+                                        style={{color: positionColors[index]}}>#{driver.place}</p>
+            </div>
+            <div className="relative">
+              <img src={`${backendEndpoint}/${driver.imgUrl}`} alt="Driver" className="w-auto h-36 rounded-md mx-6"/>
+              <div className="absolute -bottom-1 right-4 bg-white rounded p-1 w-12 border-black border-2">
+                <p className="text-gray-600 text-center">{driver.code}</p>
+              </div>
+            </div>
+            <div className="grow">
+              <div className="flex flex-row items-center">
+                <img src={`https://flagsapi.com/${driver.country}/flat/64.png`} alt="Country Flag"
+                     className="h-10 mr-2"/>
+                <h2 className="text-xl font-semibold">{driver.firstname} {driver.lastname}</h2>
+              </div>
+              <p className="text-gray-600">{driver.team}</p>
+            </div>
+            <button onClick={() => handleOvertake(driver.id)} disabled={driver.place === 1}
+                    className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none disabled:bg-gray-300">
               Overtake
             </button>
           </div>
         ))}
-      </div>
-    </main>
+      </FlipMove>
+    </div>
   );
 }
 
