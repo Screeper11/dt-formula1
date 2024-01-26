@@ -8,7 +8,10 @@ import {DriversManager} from "./DriversManager";
 const app = express();
 const port = 3001;
 app.use(cors({
-  origin: 'https://formula.screeper.dev'
+  origin: 'https://formula.screeper.dev',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true,
+  allowedHeaders: 'Content-Type,Authorization',
 }))
 
 // Load data
