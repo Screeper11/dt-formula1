@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {Flipper, Flipped} from 'react-flip-toolkit';
 import axios from 'axios';
-import {backendEndpoint} from "./env";
+import ENV from './env.json';
+
 
 interface Driver {
   id: number;
@@ -15,11 +16,23 @@ interface Driver {
 }
 
 function Drivers() {
+  const positionColors = ['#CBB01E', '#949494', '#CD7F32'];
+  const [overtakeCounters, setOvertakeCounters] = useState(Array(21).fill(1));
   const [drivers, setDrivers] = useState<Driver[]>([]);
+
+  const handleOvertakeCounterChange = (index: number) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    setOvertakeCounter(index, Number(event.target.value));
+  };
+
+  function setOvertakeCounter(index: number, value: number) {
+    const newValues = [...overtakeCounters];
+    newValues[index] = value;
+    setOvertakeCounters(newValues);
+  }
 
   const fetchDrivers = async () => {
     try {
-      const response = await axios.get(`${backendEndpoint}/api/drivers`);
+      const response = await axios.get(`${ENV.BACKEND}/api/drivers`);
       const sortedByPlace = response.data.sort((a: Driver, b: Driver) => a.place - b.place);
       setDrivers(sortedByPlace);
     } catch (error) {
@@ -27,10 +40,11 @@ function Drivers() {
     }
   };
 
-  const handleOvertake = async (driverId: number) => {
+  const handleOvertake = async (index: number, driverId: number) => {
     try {
-      await axios.post(`${backendEndpoint}/api/drivers/${driverId}/overtake`);
+      await axios.post(`${ENV.BACKEND}/api/drivers/${driverId}/overtake?overtakes=${overtakeCounters[index]}`);
       await fetchDrivers();
+      setOvertakeCounter(index, 1)
     } catch (error) {
       console.error(error);
     }
@@ -40,8 +54,6 @@ function Drivers() {
     fetchDrivers().catch(e => console.error(e));
   }, []);
 
-  const positionColors = ['#CBB01E', '#949494', '#CD7F32'];
-
   return (
     <div className="flex flex-col justify-around max-h-screen">
       <h1 className="text-6xl text-center font-semibold m-8">Drivers</h1>
@@ -50,12 +62,13 @@ function Drivers() {
         {drivers.map((driver, index) => (
           <Flipped key={driver.id} flipId={driver.id}>
             <div key={driver.id}
-                 className=" flex flex-row justify-between items-center bg-gradient-to-r from-gray-100 to-blue-50 p-4 shadow-md rounded-md border border-gray-200 mx-4">
+                 className="flex flex-row justify-between items-center bg-gradient-to-r from-gray-100 to-blue-50 p-4 shadow-md rounded-md border border-gray-200 mx-4">
               <div className="mx-auto"><p className="text-3xl font-bold w-16"
                                           style={{color: positionColors[index]}}>#{driver.place}</p>
               </div>
               <div className="relative">
-                <img draggable={false} src={`${backendEndpoint}/${driver.imgUrl}`} alt="Driver" className="w-auto h-36 rounded-md mx-6"/>
+                <img draggable={false} src={`${ENV.BACKEND}/${driver.imgUrl}`} alt="Driver"
+                     className="w-auto h-36 rounded-md mx-6"/>
                 <div className="absolute -bottom-1 right-4 bg-white rounded p-1 w-12 border-black border-2">
                   <p className="text-black font-bold text-center">{driver.code}</p>
                 </div>
@@ -68,10 +81,19 @@ function Drivers() {
                 </div>
                 <p className="text-gray-600 select-text">{driver.team}</p>
               </div>
-              <button onClick={() => handleOvertake(driver.id)} disabled={driver.place === 1}
-                      className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none disabled:bg-gray-300">
+              <button onClick={() => handleOvertake(index, driver.id)} disabled={driver.place === 1}
+                      className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none disabled:bg-gray-300">
                 Overtake
               </button>
+              <input
+                type="number"
+                className="mx-2 py-2 text-center border shadow rounded-md p-1 w-12"
+                value={overtakeCounters[index]}
+                min="1"
+                max="20"
+                onChange={handleOvertakeCounterChange(index)}
+              />
+              <div className="w-16">{overtakeCounters[index] > 1 ? "positions" : "position"}</div>
             </div>
           </Flipped>
         ))}

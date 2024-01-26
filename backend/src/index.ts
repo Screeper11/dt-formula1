@@ -29,16 +29,30 @@ app.get('/api/drivers', (req, res) => {
 
 app.post('/api/drivers/:driverId/overtake', (req, res) => {
   const driverId = parseInt(req.params.driverId);
+  console.log(`Received overtake request for driverId: ${driverId}`);
+
+  const overtakes = req.query.overtakes ? parseInt(req.query.overtakes as string) : 1;
+  console.log(`Number of overtakes requested: ${overtakes}`);
+
   const driver = driversManager.findDriverById(driverId);
 
-  if (driver === undefined || !driversManager.canOvertake(driver)) {
+  if (driver === undefined) {
+    console.error(`Driver with ID ${driverId} not found.`);
     res.status(400).send();
     return;
   }
 
-  driversManager.performOvertake(driver);
+  if (!driversManager.canOvertake(driver)) {
+    console.error(`Driver with ID ${driverId} cannot overtake.`);
+    res.status(400).send();
+    return;
+  }
+
+  driversManager.performOvertake(driver, overtakes);
+  console.log(`Driver ${driverId} performed ${overtakes} overtakes.`);
   res.status(200).send();
 });
+
 
 
 app.listen(port, () => {

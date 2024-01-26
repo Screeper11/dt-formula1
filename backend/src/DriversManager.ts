@@ -26,17 +26,19 @@ export class DriversManager {
     return driver !== undefined && driver.place > 1;
   }
 
-  performOvertake(driver: Driver) {
+performOvertake(driver: Driver, overtakes: number) {
+  for (let i = 0; i < overtakes; i++) {
     const overtakenDriver = this.drivers.find(d => d.place === driver.place - 1);
     if (overtakenDriver) {
       driver.place--;
       overtakenDriver.place++;
+    } else {
+      // Break out of the loop if no driver to overtake
+      break;
     }
   }
+}
 
-  compareByPlace(a: Driver, b: Driver): number {
-    return a.place - b.place;
-  }
 }
 
 interface Driver {
