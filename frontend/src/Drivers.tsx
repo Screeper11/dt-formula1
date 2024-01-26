@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import FlipMove from 'react-flip-move';
+import {Flipper, Flipped} from 'react-flip-toolkit';
 import axios from 'axios';
 import {backendEndpoint} from "./env";
 
@@ -45,9 +45,10 @@ function Drivers() {
   return (
     <div className="flex flex-col justify-around max-h-screen">
       <h1 className="text-6xl text-center font-semibold m-8">Drivers</h1>
-      <FlipMove className="grow grid grid-cols-1 gap-4 overflow-auto">
+      <Flipper flipKey={drivers.map(driver => driver.id).join(",")} className="grow grid grid-cols-1 gap-4 overflow-auto">
         {drivers.map((driver, index) => (
-          <div key={driver.id}
+          <Flipped key={driver.id} flipId={driver.id}>
+            <div key={driver.id}
                className=" flex flex-row justify-between items-center bg-gradient-to-r from-gray-100 to-blue-50 p-4 shadow-md rounded-md border border-gray-200 mx-4">
             <div className="mx-auto"><p className="text-3xl font-bold w-16"
                                         style={{color: positionColors[index]}}>#{driver.place}</p>
@@ -71,8 +72,9 @@ function Drivers() {
               Overtake
             </button>
           </div>
+          </Flipped>
         ))}
-      </FlipMove>
+      </Flipper>
     </div>
   );
 }
