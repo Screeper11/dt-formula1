@@ -1,1 +1,1 @@
-export const backendEndpoint = "http://localhost:3001"
+export const backendEndpoint = "https://backend.formula.screeper.dev"

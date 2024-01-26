@@ -1,4 +1,4 @@
-# Formula 1 Drivers Information App
+# Formula 1 Drivers App
 
 This project is a simple web application displaying and mutating information of Formula 1 drivers. It uses Node.js and Express for the backend, React for the frontend, and is written in modern TypeScript.
 
