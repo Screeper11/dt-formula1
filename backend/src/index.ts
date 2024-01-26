@@ -26,7 +26,7 @@ const driversManager: DriversManager = (() => {
 
 
 app.get('/api/drivers', (req, res) => {
-  res.json(driversManager);
+  res.json(driversManager.drivers);
 });
 
 app.post('/api/drivers/:driverId/overtake', (req, res) => {

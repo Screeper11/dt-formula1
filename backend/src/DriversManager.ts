@@ -13,7 +13,7 @@ export class DriversManager {
 
   updateDriversData() {
     this.drivers.forEach((driver, index) => {
-      driver.imgUrl = `/static/${driver.code.toLowerCase()}.png`;
+      driver.imgUrl = `static/${driver.code.toLowerCase()}.png`;
       driver.place = index + 1;
     });
   }
