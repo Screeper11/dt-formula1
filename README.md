@@ -40,7 +40,7 @@ The application will be running on `http://localhost:3000`.
 
 ## Demonstration Video
 
-A brief demonstration of the application is available [here]([Loom link]).
+A brief demonstration of the application is available [here](https://www.loom.com/share/04c1e285b0ff406898cb39981b65bb7a).
 
 ---
 
