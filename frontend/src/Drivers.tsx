@@ -63,16 +63,16 @@ function Drivers() {
               </div>
               <div className="relative">
                 <img draggable={false} src={`${process.env.REACT_APP_BACKEND}/${driver.imgUrl}`} alt="Driver"
-                     className="hidden md:block w-auto h-20 rounded-md mx-4"/>
+                     className="hidden sm:block w-auto h-20 rounded-md mx-4"/>
                 <div
-                  className="hidden md:block absolute -bottom-1 right-4 bg-white rounded p-1 w-10 border border-black">
+                  className="hidden sm:block absolute -bottom-1 right-4 bg-white rounded p-1 w-10 border border-black">
                   <p className="text-center text-xs text-black">{driver.code}</p>
                 </div>
               </div>
               <div className="grow">
                 <div className="flex flex-row items-center">
                   <img draggable={false} src={`https://flagsapi.com/${driver.country}/flat/64.png`} alt="Country Flag"
-                       className="hidden md:block h-10 mr-2"/>
+                       className="hidden sm:block h-10 mr-2"/>
                   <h2 className="text-m sm:text-xl font-semibold select-text">{driver.firstname} {driver.lastname}</h2>
                 </div>
                 <p className="text-xs sm:text-base text-gray-600 select-text">{driver.team}</p>
@@ -97,8 +97,7 @@ function Drivers() {
       </Flipper>
       <div className="bg-gray-100 text-center text-gray-500 text-sm p-4 border-t-2 border-bla">
         <p>Made by Bence Papp: <a className="text-blue-600 hover:underline"
-                                  href="https://github.com/Screeper11/dt-formula1">DT-Formula1
-          on GitHub</a>.</p>
+                                  href="https://github.com/Screeper11/dt-formula1">DT-Formula1 on GitHub</a>.</p>
       </div>
     </div>
   );

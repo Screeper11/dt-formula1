@@ -13,14 +13,14 @@ This project is a simple web application displaying and mutating information of 
 ### Installation
 
 ```bash
-cd backend && npm install && cd ../frontend && npm install && cd ..
+cd backend && npm install && npm run setup && cd ../frontend && npm install && cd ..
 ```
 
 > [!NOTE]  
 > If install runs into a peerDependencies conflict, use the following command instead
 
 ```bash
-cd backend && npm install && cd ../frontend && npm install --legacy-peer-deps && cd ..
+cd backend && npm install && npm run setup && cd ../frontend && npm install --legacy-peer-deps && cd ..
 ```
 
 ### Running the Application
