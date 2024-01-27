@@ -54,3 +54,5 @@ app.post('/api/drivers/:driverId/overtake', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+export default app;

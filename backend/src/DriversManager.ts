@@ -97,7 +97,7 @@ export class DriversManager {
   }
 }
 
-interface Driver {
+export interface Driver {
   id: number;
   code: string;
   firstname: string;

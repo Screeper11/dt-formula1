@@ -48,7 +48,7 @@ function Drivers() {
 
   useEffect(() => {
     fetchDrivers().catch(e => console.error(e));
-    console.log('drivers fetched', drivers)
+    console.log('drivers fetched')
   }, []);
 
   return (
