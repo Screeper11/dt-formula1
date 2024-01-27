@@ -14,6 +14,14 @@ export class DriversManager {
     this.pool = pool;
   }
 
+  async lockDatabase() {
+    await this.pool.query('BEGIN; LOCK TABLE "drivers" IN ACCESS EXCLUSIVE MODE;');
+  }
+
+  async unlockDatabase() {
+    await this.pool.query('COMMIT;');
+  }
+
   async checkIfExists() {
     try {
       await this.pool.query('SELECT 1 FROM "drivers" LIMIT 1');
@@ -24,7 +32,7 @@ export class DriversManager {
   }
 
   async initDrivers(drivers: Driver[]) {
-    await this.pool.query('BEGIN');
+    await this.lockDatabase();
     try {
       shuffle(drivers);
       await this.pool.query(
@@ -47,10 +55,11 @@ export class DriversManager {
           [driver.id, driver.code, driver.firstname, driver.lastname, driver.country, driver.team, driver.imgUrl, driver.place]
         );
       }
-      await this.pool.query('COMMIT');
     } catch (err) {
       await this.pool.query('ROLLBACK');
       throw err;
+    } finally {
+      await this.unlockDatabase();
     }
   }
 
@@ -60,29 +69,25 @@ export class DriversManager {
   }
 
   async performOvertake(driverId: number, overtakes: number) {
-    await this.pool.query('BEGIN');
+    await this.lockDatabase();
     try {
       for (let i = 0; i < overtakes; i++) {
-        // Find the driver who is currently in the place to be overtaken
-        const driverToOvertake = await this.pool.query('SELECT "id" FROM "drivers" WHERE "place" = (SELECT "place" FROM "drivers" WHERE "id" = $1) - 1', [driverId]);
-
-        // Check if there is a driver to overtake
-        if (driverToOvertake.rows.length > 0) {
-          // Decrease the place of the driver overtaking
-          await this.pool.query('UPDATE "drivers" SET "place" = "place" - 1 WHERE "id" = $1', [driverId]);
-
-          // Increase the place of the driver being overtaken
-          await this.pool.query('UPDATE "drivers" SET "place" = "place" + 1 WHERE "id" = $1', [driverToOvertake.rows[0].id]);
-        } else {
-          // No driver to overtake, break the loop
+        const nextDriverToOvertake = await this.pool.query('SELECT "id" FROM "drivers" WHERE "place" = (SELECT "place" FROM "drivers" WHERE "id" = $1) - 1', [driverId]);
+        if (nextDriverToOvertake.rows.length == 0) {
           break;
         }
-      }
 
-      await this.pool.query('COMMIT');
+        // Decrease the place of the driver overtaking
+        await this.pool.query('UPDATE "drivers" SET "place" = "place" - 1 WHERE "id" = $1', [driverId]);
+
+        // Increase the place of the driver being overtaken
+        await this.pool.query('UPDATE "drivers" SET "place" = "place" + 1 WHERE "id" = $1', [nextDriverToOvertake.rows[0].id]);
+      }
     } catch (err) {
       await this.pool.query('ROLLBACK');
       throw err;
+    } finally {
+      await this.unlockDatabase();
     }
   }
 }
