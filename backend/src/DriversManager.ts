@@ -24,19 +24,21 @@ export class DriversManager {
 
   async checkIfExists() {
     try {
-      await this.pool.query('SELECT 1 FROM "drivers" LIMIT 1');
-      return true;
-    } catch (error) {
-      return false;
+      const result = await this.pool.query('SELECT 1 FROM "drivers" LIMIT 1');
+      return result.rowCount && result.rowCount > 0;
+    } catch (error: any) {
+      if (error.code === '42P01') { // Table does not exist
+        return false;
+      } else {
+        throw error;
+      }
     }
   }
 
+
   async initDrivers(drivers: Driver[]) {
-    await this.lockDatabase();
-    try {
-      shuffle(drivers);
-      await this.pool.query(
-        `CREATE TABLE IF NOT EXISTS "drivers" (
+    await this.pool.query(
+      `CREATE TABLE IF NOT EXISTS "drivers" (
         "id" INTEGER PRIMARY KEY,
         "code" TEXT NOT NULL,
         "firstname" TEXT NOT NULL,
@@ -46,7 +48,10 @@ export class DriversManager {
         "imgUrl" TEXT NOT NULL,
         "place" INTEGER NOT NULL
       )`
-      );
+    );
+    await this.lockDatabase();
+    try {
+      shuffle(drivers);
       for (const driver of drivers) {
         driver.imgUrl = `static/${driver.code.toLowerCase()}.png`;
         driver.place = drivers.indexOf(driver) + 1;
