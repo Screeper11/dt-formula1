@@ -6,5 +6,4 @@ COPY . .
 RUN npm run build
 RUN npm install -g serve
 
-EXPOSE $PORT
-CMD ["serve", "-s", "build", "-l", "localhost:$PORT"]
+CMD ["serve", "-s", "build", "-l", "$PORT"]
