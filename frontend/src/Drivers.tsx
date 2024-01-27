@@ -39,7 +39,8 @@ function Drivers() {
       const overTakeAmount = overtakeCounters[index];
       await axios.post(`${process.env.REACT_APP_BACKEND}/api/drivers/${driverId}/overtake?overtakes=${overTakeAmount}`);
       await fetchDrivers();
-      setOvertakeCounters(Array(21).fill(1));
+      setOvertakeCounters(Array(21).fill(1));  // Resets counters to 1
+      console.log(`${drivers[index].firstname} ${drivers[index].lastname} overtook ${overTakeAmount} places`)
     } catch (error) {
       console.error(error);
     }
@@ -47,6 +48,7 @@ function Drivers() {
 
   useEffect(() => {
     fetchDrivers().catch(e => console.error(e));
+    console.log('drivers fetched', drivers)
   }, []);
 
   return (
